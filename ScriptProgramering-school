@@ -70,6 +70,7 @@ centerme "Copyright (c) 2019 - Lukas Hoffmann(Crysal)" "\\e[34m" "\\e[0m"
 centerme "The script is made for instllation of LAMP and more" "\\e[34m" "\\e[0m"
 centerme "Start date: 01-04-2019 09:57" "\\e[34m" "\\e[0m"
 centerme "Log file stored at /var/log/ScriptLog\\n" "\\e[34m" "\\e[0m"
+centerme "https://github.com/crysal0/Shells-of-power/blob/master/ScriptProgramering-school" "\\e[34m" "\\e[0m"
 
 }
 #Kalder på den header vi liger har lavet for at få det vist som det første
@@ -204,7 +205,6 @@ yum install ntp --assumeyes --quiet --errorlevel=0 | tee --append /var/log/Scrip
 ntpdate 0.dk.pool.ntp.org >>  /var/log/ScriptLog
 systemctl enable ntpd
 systemctl start ntpd
-
 
 #sætter static ip hvis auto er sat
 if $autocheck ; then
