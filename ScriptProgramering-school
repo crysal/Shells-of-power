@@ -1,10 +1,44 @@
 #!/bin/bash
 
+#hvis du vil vide hvad du kan
+if [ "$1" == "-?" ] || [ "$1" == "--help" ]
+then
+cat <<\HELP
+Script usage: ./script (-a, --auto (-ip)) (-?, --help)
+-a, --auto (-ip)
+     Sets the script to never ask for user input. Usernames and passwords will be set to $RANDOM
+     Usernames, passwords and IPs are printet in plaintext into the /var/log/ScriptLog file.
+	   if '-ip' is set you will have to type the IPs you want else it will set as random between 001-255
+	 
+
+-?, --help
+     Shows this page
+HELP
+exit 0
+fi
+
 #En function til at centrere text
 function centerme {
 tput cup $(tput lines) $(($(($(tput cols) / 2))-$((${#1} / 2))))
 echo -e "$2$1$3"
 } #centerme $TXT $ColorCode $ColorcodeEnd [Remember to use 2 \ infort of color code] \\e[31m \\e[0m
+
+function karkter
+{
+cat <<\EOF
+ ___     _____   
+(_  |   /  _  \  
+  | |  (___)| |  
+  | |       / /  
+  | |      / /   
+  | |     / /    
+  | |    / /     
+  | |   / /____  
+ (___) (_______) 
+EOF
+sleep 0.05
+clear
+}
 
 #starter på header
 #laver en function til headern så der kan kaleds på den senere i secripted uden af den skal fylde så meget
@@ -45,8 +79,8 @@ sleep 5
 
 #reboot checker
 if [ ! -f /rebootchecker ] ; then #reboot if
-me=`basename "$0"`
-echo "bash /root/$me" >> ~/.bashrc 
+WhereAmI="$(pwd)/`basename "$0"`" #tager navnet på den script som der køres og stien
+echo "bash $WhereAmI" >> ~/.bashrc 
 
 
 #kan sætte -a, --auto til at den køre uden user input
@@ -59,31 +93,19 @@ else
 autocheck=false
 centerme "Manual is set" "\\e[90m" "\\e[0m"
 fi
-#hvis du vil vide hvad du kan
-if [ "$1" == "-?" ] || [ "$1" == "--help" ]
-then
-cat <<\HELP
-Script usage: ./script (-a, --auto (-ip)) (-?, --help)
--a, --auto (-ip)
-     Sets the script to never ask for user input. Usernames and passwords will be set to $RANDOM
-     Usernames, passwords and IPs are printet in plaintext into the /var/log/ScriptLog file.
-	   if '-ip' is set you will have to type the IPs you want else it will set as random between 001-255
-	 
 
--?, --help
-     Shows this page
-HELP
-exit
-fi
+
 #starter med at ligge en log med hvornår scriptet er started i log filen /var/log/ScriptLog
 #Alle yum kommandoer har et pipe tee på til at putte errors i loggen
 echo -e "\n                    $me was started $(date)" >> /var/log/ScriptLog
+
 
 #her opdatager man så man er sikker på at maskinen er klar til at køre installationer
 centerme "Checking for updates" "\\e[0m" "\\e[31m"
 echo -e "\n                              CHECKING FOR UPDATES\n" >> /var/log/ScriptLog
 #en yum som køre uden noget output, der kommer kun output hvis der er nogle errors ved level 0, dette bliver lagt i log fil.. Det køres på alle yum i scripted
 yum update --assumeyes --quiet --errorlevel=0 | tee --append /var/log/ScriptLog
+
 
 #tilføjer PHP 7.3 reposotory og fjerner 5.4 reposotory
 centerme "Configuring PHP Repsotorys" "\\e[0m" "\\e[31m"
@@ -94,6 +116,7 @@ echo -e "\n                              RREMOVING PHP5.4 REPOSOTORY\n" >> /var/
 yum-config-manager --disable remi-php54 >> /var/log/ScriptLog
 yum-config-manager --enable remi-php73 >> /var/log/ScriptLog
 
+
 #install Apache/ PHP 7.3
 centerme "Installing Apache/ PHP 7.3" "\\e[0m" "\\e[31m"
 echo -e "\n                              INSTALLING APACHE/PHP7.3\n" >> /var/log/ScriptLog
@@ -102,6 +125,7 @@ echo "<?php
 phpinfo();
 ?>" > /var/www/html/info.php
 systemctl enable httpd
+
 
 #install MariaDB and configuring
 centerme "Installing MariaDB" "\\e[0m" "\\e[31m"
@@ -146,6 +170,7 @@ read -s -p "New database user2 password: " DBUSERPASS2
 echo -e "\e[31m"
 fi
 
+
 #køre mysql til at Secure_install og lave databases og bruger
 mysql --execute "UPDATE mysql.user SET Password=PASSWORD('${DBPASS}') WHERE User='root';"
 mysql --execute "DELETE FROM mysql.user WHERE User='';"
@@ -160,6 +185,7 @@ mysql --execute "GRANT ALL ON ${DBNAME1}.* TO '${DBUSER1}'@'localhost';"
 mysql --execute "GRANT ALL ON ${DBNAME2}.* TO '${DBUSER2}'@'localhost';"
 mysql --execute "FLUSH PRIVILEGES;"
 
+
 #installere iptables
 centerme "Installing Firewall" "\\e[0m" "\\e[31m"
 echo -e "\n                              INSTALLING AND CONFIGURING IPTABLES-SERVICE\n" >> /var/log/ScriptLog
@@ -170,6 +196,7 @@ systemctl mask firewalld >> /var/log/ScriptLog
 iptables -A INPUT -p tcp -m multiport --dports 80,443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -p tcp -m multiport --dports 80,443 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 
+
 #installing NTP and configuring NTP
 centerme "Installing NTP" "\\e[0m" "\\e[31m"
 echo -e "\n                              INSTALLING NTP\n" >> /var/log/ScriptLog
@@ -177,6 +204,7 @@ yum install ntp --assumeyes --quiet --errorlevel=0 | tee --append /var/log/Scrip
 ntpdate 0.dk.pool.ntp.org >>  /var/log/ScriptLog
 systemctl enable ntpd
 systemctl start ntpd
+
 
 #sætter static ip hvis auto er sat
 if $autocheck ; then
@@ -225,25 +253,40 @@ cat /etc/selinux/config >> /var/log/ScriptLog
 #laver den fil som bliver tjekket på begyndelse af script
 touch /rebootchecker
 #hvis auto er sat til genstart med det samme
-echo "Rebooting in 5 secounds becuse selinux has been disabled"
+echo "Rebooting in 6 secounds becuse selinux has been disabled"
 if $autocheck ; then
 reboot
 fi
 #Kræver user confirmation for at genstarte
 read -p "Please confirm by pressing enter"
 sleep 1
+echo "12"
+sleep 0.5
+echo "11"
+sleep 0.5
+echo "10"
+sleep 0.5
+echo "9"
+sleep 0.5
+echo "8"
+sleep 0.5
+echo "7"
+sleep 0.5
+echo "6"
+sleep 0.5
 echo "5"
-sleep 1
+sleep 0.5
 echo "4"
-sleep 1
+sleep 0.5
 echo "3"
-sleep 1
+sleep 0.5
 echo "2"
-sleep 1
+sleep 0.5
 echo "1"
+sleep 0.5
+echo -e "\e[30m\e[44mRebooting\e[0m"
 sleep 1
-echo -e "\e[91m\e[103mRebooting\e[0m"
-sleep 1
+karkter
 reboot
 fi
 
@@ -254,5 +297,4 @@ rm -f /rebootchecker
 fi #reboot fi
 
 echo -e "This is the end of the script\e[0m" #end echo to put terminal back to default colors
-
 exit 0
