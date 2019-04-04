@@ -58,7 +58,7 @@ _____________________________)    (_____________________________
                       .-\   //    \\   /-.                        
                    _.'.- `._        _.' -.`._                     
                  .' .'  /  '``----''`  \  `. `.                   
-                   /  .' .'.'/|..|\`.`. `.  \                     
+                   /  .' .'.'/|12|\`.`. `.  \                     
                   `  /  / .'| |||| |`. \  \  '                    
                    ::_.' .' /| || |\ `. `._::                     
                      '``.' | | || | | `.''`                       
@@ -69,7 +69,7 @@ PHEONIX
 centerme "Copyright (c) 2019 - Lukas Hoffmann(Crysal)" "\\e[34m" "\\e[0m"
 centerme "The script is made for instllation of LAMP and more" "\\e[34m" "\\e[0m"
 centerme "Start date: 01-04-2019 09:57" "\\e[34m" "\\e[0m"
-centerme "Log file stored at /var/log/ScriptLog\\n" "\\e[34m" "\\e[0m"
+centerme "Log file stored at /var/log/ScriptLog" "\\e[34m" "\\e[0m"
 centerme "https://github.com/crysal0/Shells-of-power/blob/master/ScriptProgramering-school" "\\e[34m" "\\e[0m"
 
 }
