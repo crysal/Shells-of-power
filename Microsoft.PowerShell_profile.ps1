@@ -10,7 +10,7 @@ $host.ui.RawUI.WindowTitle = "Administrator: "+$GetUsername } Else
 { $host.ui.RawUI.WindowTitle = "Low level scrub: "+$GetUsername }
   
 do {
-$BasPassword =[System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String("#PUT PASSWORD HERE#"))
+$BasPassword =[System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String("PUT BASE64 Binary ENCRYPTED PASSWORD HERE"))
 $GetPassword = read-host "Password" -AsSecureString
 $ThePassword = $BasPassword | ConvertTo-SecureString -asPlainText -Force
 
@@ -45,3 +45,16 @@ Write-host "  \ \  /\  / /___ | |  ___  ___   _ __ ___    ___  | \  / |  __ _  _
 Write-host "   \ \/  \/ // _ \| | / __|/ _ \ | '_ ' _ \  / _ \ | |\/| | / _' |/ __|| | / _ \| '__|" -ForegroundColor green
 Write-host "    \  /\  /|  __/| || (__| (_) || | | | | ||  __/ | |  | || (_| |\__ \| ||  __/| |   " -ForegroundColor green
 Write-host "     \/  \/  \___||_| \___|\___/ |_| |_| |_| \___| |_|  |_| \__,_||___/|_| \___||_|   " -ForegroundColor green
+
+write-host ""
+Write-host "Servers online" -Foreground green
+
+(((((Invoke-WebRequest -Uri https://ra4wvpn.com/network -UseBasicParsing | Select-Object -ExpandProperty content).ToString() -split '\n' | Select-String -Pattern ONLINE -Context 0,3).ToString() -split '\n' | Select-String -Pattern "<tr>") -replace "<span>","`n") -replace "</span>","`n").ToString() -split '\n' | Select-String -Pattern "<" -NotMatch
+write-host ""
+Write-host "Servers offline" -Foreground red
+write-host ""
+
+(((((Invoke-WebRequest -Uri https://ra4wvpn.com/network -UseBasicParsing | Select-Object -ExpandProperty content).ToString() -split '\n' | Select-String -Pattern OFFLINE -Context 0,3).ToString() -split '\n' | Select-String -Pattern "<tr>") -replace "<span>","`n") -replace "</span>","`n").ToString() -split '\n' | Select-String -Pattern "<" -NotMatch
+write-host ""
+write-host "Public IP"
+Invoke-WebRequest -uri https://canihazip.com/s -UseBasicParsing | Select-Object -ExpandProperty content 
