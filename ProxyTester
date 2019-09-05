@@ -15,3 +15,6 @@ exit 0
 
 #Expected output if proxy is broken
 #<Curl errors>
+
+
+## TODO: make it test multiple servers at once to speed up the process
