@@ -18,3 +18,4 @@ exit 0
 
 
 ## TODO: make it test multiple servers at once to speed up the process
+## make it count how many are down and how many are up
