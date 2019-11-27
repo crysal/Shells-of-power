@@ -2,7 +2,7 @@ Start-Process powershell -windowstyle hidden -verb RunAs -ArgumentList "
 
 Add-WindowsCapability -Online -name OpenSSH.server~~~~0.0.1.0
 dism /online /add-capability /capabilityName:OpenSSH.server~~~~0.0.1.0
-Install-Module -force OpenSSHUtils
+Install-Module -force OpenSSHUtils -confirm:$true
 Start-Service sshd
 Set-Service -Name sshd -StartupType 'Automatic'
 New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
