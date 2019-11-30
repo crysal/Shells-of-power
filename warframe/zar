@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+#a script to create sheet if command to check if checkbox is checked
+#output is sheets friendly
+#should be used with the output from ./war
+#$1 should be the output from ./war or a tab seperated file
+#just need to delete first blank line before copying into sheets
+#
+headcount=0
+linecount=1
+echo > test1
+while read WHO; do
+((headcount++))
+((linecount++))
+tes=( $(cat tes | head -n $headcount | tail -n 1| sed 's/\t/Q\n/g' | sed -e 's/\([0-9]\+\)/\1/g' | sed -e "s/\([0-9]\+\)/\ =if(B$linecount=False,\1,0)/g"))
+echo ${tes[*]} | sed 's/Q/\t/g' >> test1
+done < <(grep "" tes)
+exit
