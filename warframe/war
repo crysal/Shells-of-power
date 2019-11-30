@@ -1,0 +1,45 @@
+#!/bin/bash
+#
+#This script is to pull all resourse needed to craft equipment in warframe from warframe wiki
+#gives a sheets friedly output
+# $1 should be the list of weapons that completes the link
+# so repalce space with _ and if prime warframe replace space with /
+#
+(echo "Weapon"; echo "Forma"; echo "Alloy Plate"; echo "Argon Crystal"; echo "Circuits"; echo "Control Module"; echo "Cryotic"; echo "Ferrite"; echo "Gallium"; echo "Hexenon"; echo "Morphics"; echo "Nano Spores"; echo "Neural Sensors"; echo "Neurodes";>
+echo >> all
+while read WEP; do
+Link="https://warframe.fandom.com/wiki/"
+URL=$Link$WEP
+#                                                   Default 13 for weapons
+#                                                   Default 60 for warframes
+curl --url $URL | grep "Manufacturing<\/a> Requirements" -A $2 > tmp
+Salvage=( $(cat tmp | grep "alt=\"Salvage" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+Alloy=( $(cat tmp | grep "alt=\"AlloyPlate" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+Argon=( $(cat tmp | grep "alt=\"ArgonCrystal" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+Forma=( $(cat tmp | grep "alt=\"Forma" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+Circuits=( $(cat tmp | grep "alt=\"Circuits" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+ControlModule=( $(cat tmp | grep "alt=\"ControlModule" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+Cryotic=( $(cat tmp | grep "alt=\"Cryotic\"" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+Ferrite=( $(cat tmp | grep "alt=\"Ferrite" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+Gallium=( $(cat tmp | grep "alt=\"Gallium" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+Hexenon=( $(cat tmp | grep "alt=\"Hexenon" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+Morphics=( $(cat tmp | grep "alt=\"Morphics" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+NanoSpores=( $(cat tmp | grep "alt=\"NanoSpores" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+NeuralSensors=( $(cat tmp | grep "alt=\"NeuralSensor" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+Neurodes=( $(cat tmp | grep "alt=\"Neurode" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+OrokinCell=( $(cat tmp | grep "alt=\"OrokinCell" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+Oxium=( $(cat tmp | grep "alt=\"Oxium" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+Plastids=( $(cat tmp | grep "alt=\"Plastids" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+PolymerBundle=( $(cat tmp | grep "alt=\"PolymerBundle" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+Rubedo=( $(cat tmp | grep "alt=\"Rubedo" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+Salvage=( $(cat tmp | grep "alt=\"Salvage" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+Tellurium=( $(cat tmp | grep "alt=\"Tellurium" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+Fieldron=( $(cat tmp | grep "alt=\"Fieldron" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+DetoniteInjector=( $(cat tmp | grep "alt=\"DetoniteInjector" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+MutagenMass=( $(cat tmp | grep "alt=\"MutagenMass" | grep "></noscript></a><br />" | sed 's/noscript/\n/g' | awk '{print $NF}' | sed 's/,//g'))
+(echo $WEP; echo ${Forma[2]}; echo ${Alloy[2]}; echo ${Argon[2]}; echo ${Circuits[2]}; echo ${ControlModule[2]}; echo ${Cryotic[2]}; echo ${Ferrite[2]}; echo ${Gallium[2]}; echo ${Hexenon[2]}; echo ${Morphics[2]}; echo ${NanoSpores[2]}; echo ${NeuralSe>
+echo >> all
+done < <(grep "" $1)
+cat all | sed 's/\/>//g' > /var/www/html/all
+rm tmp
+exit
