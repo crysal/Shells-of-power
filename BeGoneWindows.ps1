@@ -72,6 +72,7 @@ Get-AppxPackage -AllUsers -Name Microsoft.AAD.BrokerPlugin | Remove-AppxPackage	
 Get-AppxPackage -AllUsers -Name Windows.CBSPreview | Remove-AppxPackage	#	
 Get-AppxPackage -AllUsers -Name windows.immersivecontrolpanel | Remove-AppxPackage	#	
 Get-AppxPackage -AllUsers -Name Windows.PrintDialog | Remove-AppxPackage	#	
+Get-AppxPackage *king.com*  | Remove-AppxPackage  #
 
 ((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | ?{$_.Name}).Verbs() | ?{$_.Name.replace('&','') -match 'Unpin from Start'} | %{$_.DoIt()}
 ((New-Object -Com Shell.Application).NameSpace('shell:::{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}').Items() | ?{$_.Name}).Verbs() | ?{$_.Name.replace('&','') -match 'Unpin from Start'} | %{$_.DoIt()}
