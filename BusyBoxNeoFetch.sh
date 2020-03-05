@@ -6,7 +6,7 @@ echo -e '     \033[0;37m##\033[1;33m#######\033[0;37m##        ''\033[1;33mUptim
 echo -e '    ##\033[1;33m#########\033[0;37m##       ''\033[1;33mShell:\033[0;37m '$SHELL
 echo -e '   #\033[1;33m############\033[0;37m##      ''\033[1;33mResolution:\033[0;37m SKIPPED'
 echo -e '   #\033[1;33m############\033[0;37m###     ''\033[1;33mTerminal:\033[0;37m '
-echo -e '  \033[1;33m##\033[0;37m#\033[1;33m###########\033[0;37m##\033[1;33m#     ''\033[1;33mCPU:\033[0;37m '$(cat /proc/cpuinfo | grep 'cpu model' | sed 's/.*://g') $(cat /proc/cpuinfo | grep 'BogoMIPS' | sed 's/.*:/@/g' | sed 's/$/ Bogo MIPS/g')
-echo -e '\033[1;33m######\033[0;37m#\033[1;33m#######\033[0;37m#\033[1;33m#######  ''\033[1;33mMemory:\033[0;37m '$(($(echo $(cat /proc/meminfo | grep "Mem" | awk {'print $2}') | awk '{print $1}') - $(echo $(cat /proc/meminfo | grep "Mem" | awk {'print $2}') | awk '{print $2}')))"kB / "$(cat /proc/meminfo | grep "MemTotal" | awk {'print $2}')"kB"
+echo -e '  \033[1;33m##\033[0;37m#\033[1;33m###########\033[0;37m##\033[1;33m#     ''\033[1;33mCPU:\033[0;37m '$(cat /proc/cpuinfo | grep 'cpu model' | sed 's/.*://g') $(cat /proc/cpuinfo | grep 'BogoMIPS' | sed 's/.*:/@/g' | sed 's/$/ BogoMIPS/g')
+echo -e '\033[1;33m######\033[0;37m#\033[1;33m#######\033[0;37m#\033[1;33m####### ''\033[1;33mMemory:\033[0;37m '$(($(echo $(cat /proc/meminfo | grep "Mem" | awk {'print $2}') | awk '{print $1}') - $(echo $(cat /proc/meminfo | grep "Mem" | awk {'print $2}') | awk '{print $2}')))"kB / "$(cat /proc/meminfo | grep "MemTotal" | awk {'print $2}')"kB"
 echo -e '\033[1;33m#######\033[0;37m#\033[1;33m######\033[0;37m#\033[1;33m########'
 echo -e '  \033[1;33m####\033[0;37m########\033[1;33m####\033[0;37m'
