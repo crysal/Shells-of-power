@@ -5,8 +5,13 @@ exit 1
 fi
 
 while read pass; do
-curl --proxy $pass --url https://canihazip.com/s
-echo ""
+if (curl --proxy $pass --url https://canihazip.com/s)
+then
+  echo $pass >> working
+else
+  echo $pass "failed"
+fi &
+sleep 0.$(( ( RANDOM % 10 ) + 2 ))
 done < <(grep "" $1)
 exit 0
 
