@@ -3,7 +3,12 @@ if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
 fi
+if [ "$1" ]
+then
+FQDN=$1
+else
 read -p 'Domain name (domain.tld) ' FQDN
+fi
 if [[ $FQDN != *"."* ]]
 then
 echo "Domain must have a domain name, a .(dot) and a top level domain"
@@ -136,7 +141,6 @@ cat << EOF >> /etc/bind/db.10
 70 IN PTR mail.$FQDN.
 80 in PRT web.$FQDN.
 EOF
-service bind9 restart
 
 ##Up setting FTP with login and anonymous login
 
@@ -147,7 +151,12 @@ sed -i "s/#ftpd_banner=Welcome to blah FTP service./ftpd_banner=Welcome to $FQDN
 mkdir -p /var/ftp/$FQDN/anon
 echo "anon_root=/var/ftp/$FQDN/anon" >> /etc/vsftpd.conf
 
+##Restartin services to make sure configs are set and running
 service vsftpd restart
+service apache2 restart
+service bind9 restart
+service mariadb restart
+
 
 echo "you can now visit your site at http://"$FQDN
 echo "or ftp to $IPADDRESS with anonymous or any local users"
