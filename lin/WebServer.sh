@@ -133,4 +133,3 @@ echo "anon_root=/var/ftp/$FQDN/anon" >> /etc/vsftpd.conf
 service vsftpd restart
 
 echo "you can now visit your site at http://"$FQDN
-echo "TODO: add ftp in accordence with the goal posts"
