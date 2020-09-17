@@ -21,7 +21,7 @@ exit
 fi
 IPADDRESS=$(hostname -I | head -n1 | awk '{print $1}')
 apt-get update -y; apt-get full-upgrade -y; apt-get autoremove -y
-apt-get install apache2 mariadb-server php7.2 bind9 libapache2-mod-php vsftpd -y
+apt-get install apache2 mariadb-server php7.2 bind9 libapache2-mod-php vsftpd wget -y
 if [[ $? > 0 ]]
 then
     echo "Failed to download/install a package, please try again."
@@ -48,8 +48,13 @@ EXIT;
 EOF
 
 mkdir /var/www/$FQDN
+URL=$(echo $FQDN | sed 's/\./%20/g')
+URLS=$(wget "https://www.bing.com/images/search?q=$URL" -O- | sed 's/></>\n</g' | grep "<a class=\"thumb\" target=\"_blank\" href=\"" | sed 's/.*http/http/g' | sed 's/" h=.*//g' | head -n3)
+wget $(echo $URLS | awk '{print $1}') -O /var/www/$FQDN/$FQDN.1
+wget $(echo $URLS | awk '{print $2}') -O /var/www/$FQDN/$FQDN.2
+wget $(echo $URLS | awk '{print $3}') -O /var/www/$FQDN/$FQDN.3
 cat << EOF > /var/www/$FQDN/index.html
-<html><head><title>Secure site</title></head><body><h1>Welcome to a very secure site.</h1><a href="login.php">Login</a></body></html>
+<html><head><title>Secure site</title></head><body><h1>Welcome to a very secure site.</h1><p></p><img src="$FQDN.1"><img src="$FQDN.2"><img src="$FQDN.3"><a href="login.php">Login</a></body></html>
 EOF
 cat << EOF > /var/www/$FQDN/login.php
 <?php;
