@@ -6,7 +6,7 @@ fi
 read -p 'Domain name (domain.tld) ' FQDN 
 IPADDRESS=$(hostname -I | head -n1 | awk '{print $1}')
 apt-get update -y; apt-get full-upgrade -y; apt-get autoremove -y
-apt-get install apache2 mariadb-server php7.2 bind9 libapache2-mod-php -y
+apt-get install apache2 mariadb-server php7.2 bind9 libapache2-mod-php vsftpd -y
 
 ##Up setting DB and HTML/PHP
 
@@ -121,5 +121,16 @@ cat << EOF >> /etc/bind/db.10
 80 in PRT web.$FQDN.
 EOF
 service bind9 restart
+
+##Up setting FTP with login and anonymous login
+
+sed -i 's/#local_enable/local_enable/g' /etc/vsftpd.conf
+sed -i 's/anonymous_enable=NO/anonymous_enable=YES/g' /etc/vsftpd.conf
+sed -i 's/#ls_recurse_enable=YES/ls_recurse_enable=YES/g' /etc/vsftpd.conf
+mkdir -p /var/ftp/$FQDN/anon
+echo "anon_root=/var/ftp/$FQDN/anon" >> /etc/vsftpd.conf
+
+service vsftpd restart
+
 echo "you can now visit your site at http://"$FQDN
 echo "TODO: add ftp in accordence with the goal posts"
