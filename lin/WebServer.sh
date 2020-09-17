@@ -3,11 +3,27 @@ if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
 fi
-read -p 'Domain name (domain.tld) ' FQDN 
+read -p 'Domain name (domain.tld) ' FQDN
+if [[ $FQDN != *"."* ]]
+then
+echo "Domain must have a domain name, a .(dot) and a top level domain"
+exit
+fi
+if [ ! -d /dev/shm ]
+then
+echo "/dev/shm is needed for this, please make or unlock it"
+exit
+fi
 IPADDRESS=$(hostname -I | head -n1 | awk '{print $1}')
 apt-get update -y; apt-get full-upgrade -y; apt-get autoremove -y
 apt-get install apache2 mariadb-server php7.2 bind9 libapache2-mod-php vsftpd -y
-
+if [[ $? > 0 ]]
+then
+    echo "Failed to download/install a package, please try again."
+    exit
+else
+    echo "The apt ran succesfuly, continuing with script."
+fi
 ##Up setting DB and HTML/PHP
 
 mysql_secure_installation << EOF
@@ -127,9 +143,11 @@ service bind9 restart
 sed -i 's/#local_enable/local_enable/g' /etc/vsftpd.conf
 sed -i 's/anonymous_enable=NO/anonymous_enable=YES/g' /etc/vsftpd.conf
 sed -i 's/#ls_recurse_enable=YES/ls_recurse_enable=YES/g' /etc/vsftpd.conf
+sed -i "s/#ftpd_banner=Welcome to blah FTP service./ftpd_banner=Welcome to $FQDN FTP service/g" /etc/vsftpd.conf
 mkdir -p /var/ftp/$FQDN/anon
 echo "anon_root=/var/ftp/$FQDN/anon" >> /etc/vsftpd.conf
 
 service vsftpd restart
 
 echo "you can now visit your site at http://"$FQDN
+echo "or ftp to $IPADDRESS with anonymous or any local users"
