@@ -151,3 +151,4 @@ service vsftpd restart
 
 echo "you can now visit your site at http://"$FQDN
 echo "or ftp to $IPADDRESS with anonymous or any local users"
+exit 0
