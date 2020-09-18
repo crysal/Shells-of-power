@@ -49,18 +49,11 @@ EOF
 mysql << EOF
 CREATE USER 'WebAdmin'@'localhost' IDENTIFIED BY 'asdasd';
 GRANT ALL PRIVILEGES ON * . * TO 'WebAdmin'@'localhost';
+FLUSH PRIVILEGES;
 CREATE DATABASE WebUsers;
 USE WebUsers;
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE `users` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `email` varchar(250) NOT NULL DEFAULT '',
-  `password` varchar(200) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-LOCK TABLES `users` WRITE;
+CREATE TABLE users ( id int(11) unsigned NOT NULL AUTO_INCREMENT, email varchar(250) NOT NULL DEFAULT '', password varchar(200) NOT NULL DEFAULT '', primary key (id))ENGINE=InnoDB DEFAULT CHARSET=utf8;LOCK TABLES `users` WRITE;
 UNLOCK TABLES;
-FLUSH PRIVILEGES;
 EXIT;
 EOF
 
