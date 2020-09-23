@@ -3,8 +3,7 @@
 #A mariaDB/mySQL database is created to enable login script via .php
 #DNS is bind9 to it self to host its own domain and tld, forwards to 8.8.8.8 for normal network connections
 #FTP is slooply setup to the standards of this company (anonymous is enabled)
-#cat, wget, systemctl, cp, rm, sed, ufw, service, openssl, echo, mkdir, base64
-#todo: full pathing to each, sure they exist#
+#todo: full pathing to each#
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
@@ -28,7 +27,7 @@ exit
 fi
 IPADDRESS=$(hostname -I | head -n1 | awk '{print $1}')
 apt-get update -y; apt-get full-upgrade -y; apt-get autoremove -y
-apt-get install apache2 mariadb-server php7.2 php-mysql bind9 libapache2-mod-php vsftpd wget -y
+apt-get install apache2 mariadb-server php7.2 php-mysql bind9 libapache2-mod-php vsftpd wget sed ufw openssl systemd coreutils -y
 if [[ $? > 0 ]]
 then
     echo "Failed to download/install a package, please try again."
