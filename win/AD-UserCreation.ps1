@@ -7,7 +7,7 @@
     From the firstname and lastname a samaccountname/username, will also be created.
     Multiple OU's and groups (Administration, IT-afdeling,  Marketing, Salg, Produktion, Udvikling)
 .NOTES
-    Created by: xxx, xxx, crysal and xxx
+    Created by: [ ̶R̶E̶D̶A̶C̶T̶E̶D̶ ]
     Date: 29-10 2019
 #>
 
