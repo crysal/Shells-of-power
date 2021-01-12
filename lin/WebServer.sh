@@ -6,6 +6,9 @@
 #Recommended usage: wget https://raw.githubusercontent.com/crysal0/Shells-of-power/master/lin/WebServer.sh -O $0
 #todo: full pathing to each#
 
+##PLEASE BE SURE TO HAVE A CORRECT HOSTNAME
+#change it with hostnamectl set-hostname <HOSTNAME HERE>
+
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
