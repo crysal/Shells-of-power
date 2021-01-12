@@ -47,9 +47,6 @@ y
 y
 EOF
 mysql << EOF
-CREATE DATABASE DataBaseName;
-CREATE USER 'DataBaseUser'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Kode1234!';
-GRANT ALL PRIVILEGES ON DataBaseName.* TO 'DataBaseUser'@'localhost' WITH GRANT OPTION;
 CREATE USER 'WebAdmin'@'localhost' IDENTIFIED BY 'asdasd';
 GRANT ALL PRIVILEGES ON * . * TO 'WebAdmin'@'localhost';
 FLUSH PRIVILEGES;
