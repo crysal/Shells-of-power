@@ -47,6 +47,9 @@ y
 y
 EOF
 mysql << EOF
+CREATE DATABASE DataBaseName;
+CREATE USER 'DataBaseUser'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Kode1234!';
+GRANT ALL PRIVILEGES ON DataBaseName.* TO 'DataBaseUser'@'localhost' WITH GRANT OPTION;
 CREATE USER 'WebAdmin'@'localhost' IDENTIFIED BY 'asdasd';
 GRANT ALL PRIVILEGES ON * . * TO 'WebAdmin'@'localhost';
 FLUSH PRIVILEGES;
@@ -100,6 +103,23 @@ cat << EOF > /etc/apache2/sites-available/$FQDN.conf
 <VirtualHost *:443>
    ServerName $FQDN
    DocumentRoot /var/www/$FQDN
+   
+       Alias /wordpress /var/www/wordpress-custom-folder
+    <Directory /var/www/wordpress-custom-folder>
+        Options None FollowSymLinks
+        # Enable .htaccess Overrides:
+        AllowOverride All
+        DirectoryIndex index.php
+        Order allow,deny
+        Allow from all
+        Require all granted
+    </Directory>
+
+    <Directory /var/www/wordpress-custom-folder/wp-content>
+        Options FollowSymLinks
+        Order allow,deny
+        Allow from all
+    </Directory>
 
    SSLEngine on
    SSLCertificateFile /etc/ssl/certs/apache-selfsigned.crt
@@ -157,11 +177,22 @@ echo "anon_root=/var/ftp/$FQDN/anon" >> /etc/vsftpd.conf
 
 ##Setting up webmin
 apt-get update -y
-echo "deb http://download.webmin.com/download/repository sarge contri" >> /etc/apt/sources.list
+echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
 wget -q -O- http://www.webmin.com/jcameron-key.asc | sudo apt-key add
 apt-get update -y
 apt-get install webmin -y
 ufw allow 10000
+
+##Setting up wordpress
+cd /var/www/
+
+wget https://wordpress.org/latest.tar.gz
+tar xvfz latest.tar.gz && sudo rm ./latest.tar.gz*
+mv wordpress wordpress-custom-folder
+mkdir -p /var/www/wordpress-custom-folder/wp-content/uploads
+touch /var/www/wordpress-custom-folder/.htaccess
+chown -R www-data:www-data /var/www/wordpress-custom-folder
+ln -s /var/www/wordpress-custom-folder /var/www/html/my-blog
 
 
 ##Restartin services to make sure configs are set and running
