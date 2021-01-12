@@ -3,7 +3,7 @@
 #A mariaDB/mySQL database is created to enable login script via .php
 #DNS is bind9 to it self to host its own domain and tld, forwards to 8.8.8.8 for normal network connections
 #FTP is slooply setup to the standards of this company (anonymous is enabled)
-#Recommended usage: wget https://raw.githubusercontent.com/crysal0/Shells-of-power/master/lin/WebServer.sh -O $0
+#Recommended usage: wget https://raw.githubusercontent.com/crysal/Shells-of-power/master/lin/WebServer.sh -O $0
 #todo: full pathing to each#
 
 ##PLEASE BE SURE TO HAVE A CORRECT HOSTNAME
