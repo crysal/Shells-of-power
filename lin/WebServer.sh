@@ -155,13 +155,24 @@ sed -i "s/#ftpd_banner=Welcome to blah FTP service./ftpd_banner=Welcome to $FQDN
 mkdir -p /var/ftp/$FQDN/anon
 echo "anon_root=/var/ftp/$FQDN/anon" >> /etc/vsftpd.conf
 
+##Setting up webmin
+apt-get update -y
+echo "deb http://download.webmin.com/download/repository sarge contri" >> /etc/apt/sources.list
+wget -q -O- http://www.webmin.com/jcameron-key.asc | sudo apt-key add
+apt-get update -y
+apt-get install webmin -y
+ufw allow 10000
+
+
 ##Restartin services to make sure configs are set and running
 service vsftpd restart
 service apache2 restart
 service bind9 restart
 service mariadb restart
+/etc/init.d/webmin restart
 
-
-echo "you can now visit your site at http://"$FQDN
+echo "you can now visit your site at http://$FQDN"
 echo "or ftp to $IPADDRESS with anonymous or any local users"
+echo "or accessing the webmin interface on https://$FQDN:10000"
+echo "or goto the wordpress on https://$FQDN/wordpress"
 exit 0
