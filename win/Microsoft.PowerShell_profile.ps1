@@ -7,10 +7,17 @@ IF (([Security.Principal.WindowsPrincipal] ` [Security.Principal.WindowsIdentity
 $host.ui.RawUI.WindowTitle = "Administrator: "+$GetUsername } Else
 { $host.ui.RawUI.WindowTitle = "Low level scrub: "+$GetUsername }
 do {
-$BasPassword =[System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String("PUT BASE64 Binary ENCRYPTED PASSWORD HERE"))
-$GetPassword = read-host "Password" -AsSecureString
-$ThePassword = $BasPassword | ConvertTo-SecureString -asPlainText -Force
-If (([Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($GetPassword))) -ceq ([Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($ThePassword)))){$CheckPassword=$true}else{
+$getPass = Read-Host "Password" -AsSecureString
+$unPass=[Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($GetPass))
+$md5 = (New-Object -TypeName System.Security.Cryptography.MD5CryptoServiceProvider)
+$utf8 = (New-Object -TypeName System.Text.UTF8Encoding)
+$hash = [System.BitConverter]::ToString($md5.ComputeHash($utf8.GetBytes($unPass))) -replace "-"
+$unPass=0
+$getPass=0
+
+$BasPassword = "" ##PUT MD5 of you password here
+
+if ( $hash -ceq $BasPassword  -and [System.Windows.Forms.Control]::IsKeyLocked('Scroll') -eq $true){$CheckPassword=$true}else{
 Write-host "                                 _____                _            _ " -Foreground red
 Write-host "     /\                         |  __ \              (_)          | |" -Foreground red
 Write-host "    /  \    ___  ___  ___  ___  | |  | |  ___  _ __   _   ___   __| |" -Foreground red
