@@ -1,4 +1,4 @@
-$authToken="0123456789abcdefghijklmnopqrstuvxyzzyxvutsrqpomnlkjihgfedcba9876543210" #USE YOUR "Encoded for use:" from https://wigle.net/account
+$authToken="MDEyMzQ1Njc4OWFiY2RlZmdoaWprbG1ub3BxcnN0dXZ4eXp6eXh2dXRzcnFwb21ubGtqaWhnZmVkY2JhOTg3NjU0MzIxMA=" #USE YOUR "Encoded for use:" from https://wigle.net/account
 $bssid=((netsh wlan show networks mode=bssid | Select-String -Pattern "BSSID") -replace ".*: ","") -replace ":","%3A"
 write-host "found"$bssid.count"networks"
 $bssid.Split("`n") | %{
