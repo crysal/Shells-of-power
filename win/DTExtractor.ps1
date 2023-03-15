@@ -1,12 +1,18 @@
-$PFolders=Get-ChildItem -Name "C:\Program Files (x86)\Steam\steamapps\common\Warhammer 40,000 DARKTIDE\bundle\data\"
+#EDIT ME
+$PathToDarkTide="C:\Program Files (x86)\Steam\steamapps\common\Warhammer 40,000 DARKTIDE" #Where Darktide is installed
+$PathToExtract="U:\ripaudio\extract" #Where to put the .wem files
+$PathToRavioli="U:\ripaudio\RavioliGameTools" #The path to where RavioliGameTools is stored (Download link https://www.scampers.org/steve/sms/other/RavioliGameTools_v2.10.zip)
+#
+
+$PFolders=Get-ChildItem -Name "$PathToDarkTide\bundle\data\"
 foreach ($folder in $PFolders)
 {
-$ListOFiles=Get-ChildItem -Name "C:\Program Files (x86)\Steam\steamapps\common\Warhammer 40,000 DARKTIDE\bundle\data\$folder\*.STREAM"
+$ListOFiles=Get-ChildItem -Name "$PathToDarkTide\bundle\data\$folder\*.STREAM"
 foreach ($item in $ListOFiles){
-if ( -not (Test-Path "U:\ripaudio\extract\$item" -PathType Container)){
-.\RavioliGameTools\RScannerConsole.exe "C:\Program Files (x86)\Steam\steamapps\common\Warhammer 40,000 DARKTIDE\bundle\data\$folder\$item" /e:U:\ripaudio\extract\$item
-if ( -not (Test-Path "U:\ripaudio\extract\$item" -PathType Container)){
-mkdir "U:\ripaudio\extract\$item"
+if ( -not (Test-Path "$PathToExtract\$item" -PathType Container)){
+& $PathToRavioli\RScannerConsole.exe "$PathToDarkTide\bundle\data\$folder\$item" /e:$PathToExtract\$item
+if ( -not (Test-Path "$PathToExtract\$item" -PathType Container)){
+mkdir "$PathToExtract\$item"
 }
 }
 echo "$folder $item"
